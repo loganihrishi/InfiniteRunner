@@ -1,3 +1,5 @@
+from random import random, Random
+
 import pygame
 
 # window attributes
@@ -18,7 +20,7 @@ class Player:
 
     def jump(self):
         if self.y == 440:
-            self.delta_y = 15
+            self.delta_y = 18
 
     def move_forward(self):
         self.x += self.delta_x
@@ -47,13 +49,15 @@ fps = 50
 timer = pygame.time.Clock()
 
 player = Player()  # Create the player instance
-
 isRunning = True
+
+
 while isRunning:
     timer.tick(fps)
     screen.fill(background)
     floor = pygame.draw.rect(screen, (0, 0, 0), [2, screen_height - 37.5, screen_width, 5])
     player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 20, 20])
+
 
     # checking the events during the game
     for event in pygame.event.get():
