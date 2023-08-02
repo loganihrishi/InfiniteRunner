@@ -8,23 +8,36 @@ background = (255, 255, 255)
 # player class
 class Player:
     def __init__(self):
-        self.x = 50
-        self.y = 440
+        self.x = 10
+        self.y = screen_height - 20
         self.delta_y = 0
         self.gravity = 1
+        self.delta_x = 5
         self.color = (255, 0, 0)
+        self.speed = 2
 
     def jump(self):
-        if self.y == 440:  # Check if player is on the floor to jump
-            self.delta_y = 15  # Adjust the jump strength as per your requirement
+        if self.y == 440:
+            self.delta_y = 15
+
+    def move_forward(self):
+        self.x += self.delta_x
 
     def update(self):
+
+        self.x += self.speed
         if 0 < self.delta_y or self.y < screen_height:
             self.y -= self.delta_y
             self.delta_y -= self.gravity
 
-        if self.y > 440:  # Check if player has reached the floor
+        if self.y > 440:
             self.y = 440
+
+        if self.x < 10:
+            self.x = 10
+
+        if self.x > screen_width:
+            self.x = 10
 
 # starting out the window
 pygame.init()
@@ -39,8 +52,8 @@ isRunning = True
 while isRunning:
     timer.tick(fps)
     screen.fill(background)
-    floor = pygame.draw.rect(screen, (0, 0, 0), [2, 440, screen_width, 5])
-    player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 10, 20])
+    floor = pygame.draw.rect(screen, (0, 0, 0), [2, screen_height - 37.5, screen_width, 5])
+    player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 20, 20])
 
     # checking the events during the game
     for event in pygame.event.get():
