@@ -1,8 +1,8 @@
-import pygame
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super.__init__()
-        self.score = 0
-        self.image =pygame.Surface()
+import pygame as pg
 
+# window attributes
+screen_width = 700
+screen_height = 500
+pg.init()
+screen = pg.display.set_mode((screen_width, screen_height))
 
