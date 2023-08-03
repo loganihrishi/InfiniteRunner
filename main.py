@@ -101,10 +101,13 @@ while isRunning:
 
         if obstacles[i] < -10:
             obstacles[i] = random.randint(600, 700)
+            player.score += 10
 
     player.update()
 
     # updating the display
     pygame.display.flip()
+
+print("Your Score: ", player.score)
 
 pygame.quit()
