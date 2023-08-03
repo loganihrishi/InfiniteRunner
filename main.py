@@ -82,7 +82,7 @@ def generate_random_list():
     return [first, second, third]
 
 
-obstacles = generate_random_list()
+obstacles = obstacle_set1
 # colors for obstacles
 colors = [(0, 0, 0), (113, 171, 27), (255, 153, 255)]
 
