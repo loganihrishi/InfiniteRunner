@@ -72,16 +72,6 @@ def select_difficulty():
         return obstacle_set2
     return obstacle_set3
 
-
-def generate_random_list():
-    first = random.randint(10, screen_width)
-    time.sleep(2);
-    second = random.randint(10, screen_width)
-    time.sleep(2);
-    third = random.randint(10, screen_width)
-    return [first, second, third]
-
-
 obstacles = obstacle_set1
 # colors for obstacles
 colors = [(0, 0, 0), (113, 171, 27), (255, 153, 255)]
