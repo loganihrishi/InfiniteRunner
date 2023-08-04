@@ -21,6 +21,7 @@ class Player:
         self.color = (255, 0, 0)
         self.speed = 2
         self.score = 0
+        self.high_score = 0
 
     def jump(self):
         self.delta_y = 18
@@ -42,6 +43,10 @@ class Player:
 
         if self.x > screen_width:
             self.x = 10
+
+    def update_high_score(self):
+        if self.high_score > self.score:
+            self.high_score = self.score
 
 
 class Obstacle:
@@ -68,6 +73,7 @@ obstacle_set2 = [150, 250, 315, 470, 650]
 obstacle_set3 = [200, 256, 325, 576, 650]
 obstacle_speed = 1
 active = True
+
 
 def select_difficulty():
     choice = random.randint(1, 3)
@@ -103,7 +109,8 @@ while isRunning:
     for i in range(len(obstacles)):
         color_index = random.randint(0, 2)
         curr_obstacle = obstacles[i]
-        obstacle = pygame.draw.rect(screen, colors[color_index], [curr_obstacle.x, curr_obstacle.y, curr_obstacle.width, curr_obstacle.height])
+        obstacle = pygame.draw.rect(screen, colors[color_index],
+                                    [curr_obstacle.x, curr_obstacle.y, curr_obstacle.width, curr_obstacle.height])
 
         # checking for collisions
         if player_rect.colliderect(obstacle):
@@ -121,6 +128,8 @@ while isRunning:
 
     pygame.display.flip()
 
+# updating the player's high score
+player.update_high_score()
 print("Your Score: ", player.score)
 
 pygame.quit()
