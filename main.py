@@ -16,7 +16,7 @@ class Player:
         self.x = 10
         self.y = screen_height - 20
         self.delta_y = 0
-        self.gravity = 3.5
+        self.gravity = 2
         self.delta_x = 5
         self.color = (255, 0, 0)
         self.speed = 2
@@ -61,7 +61,7 @@ class Obstacle:
 pygame.init()
 screen = pygame.display.set_mode([screen_width, screen_height])
 pygame.display.set_caption("Infinite Runner")
-fps = 50
+fps = 40
 timer = pygame.time.Clock()
 
 player = Player()  # Create the player instance
@@ -112,13 +112,13 @@ while isRunning:
                 player.jump()
 
     # Drawing the player and obstacles
-    floor = pygame.draw.rect(screen, (255, 255, 255), [2, screen_height - 37.5, screen_width, 5])
+    # floor = pygame.draw.rect(screen, (255, 255, 255), [2, screen_height - 37.5, screen_width, 5])
     player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 25, 25])
 
     for i in range(len(obstacles)):
         color_index = random.randint(0, 2)
         curr_obstacle = obstacles[i]
-        obstacle = pygame.draw.rect(screen, colors[1],
+        obstacle = pygame.draw.rect(screen, colors[2],
                                     [curr_obstacle.x, curr_obstacle.y, curr_obstacle.width, curr_obstacle.height])
 
         # checking for collisions
