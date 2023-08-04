@@ -65,7 +65,6 @@ fps = 50
 timer = pygame.time.Clock()
 
 player = Player()  # Create the player instance
-isRunning = True
 
 # obstacles
 obstacle_set1 = [50, 100, 300, 400, 500]
@@ -88,7 +87,15 @@ obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in obstacle_set1]
 
 # colors for obstacles
 colors = [(0, 0, 0), (113, 171, 27), (255, 153, 255)]
+# take user input before starting the game
+isRunning = False
+takeString = input("Start the game: ")
+if takeString in 'yY':
+    isRunning = True
+# wait for three seconds before the game starts
+time.sleep(3)
 
+# start the loop
 while isRunning:
     timer.tick(fps)
     screen.fill(background)
