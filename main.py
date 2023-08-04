@@ -66,6 +66,8 @@ timer = pygame.time.Clock()
 
 player = Player()  # Create the player instance
 
+bg = pygame.image.load("images/bg.jpg")
+
 # obstacles
 obstacle_set1 = [50, 100, 300, 400, 500]
 obstacle_set2 = [150, 250, 315, 470, 650]
@@ -99,6 +101,7 @@ time.sleep(3)
 while isRunning:
     timer.tick(fps)
     screen.fill(background)
+    screen.blit(bg, (0, 0))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
