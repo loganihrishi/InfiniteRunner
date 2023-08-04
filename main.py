@@ -137,6 +137,7 @@ while isRunning:
 
 # updating the player's high score
 player.update_high_score()
+print("Your high score", player.high_score)
 print("Your Score: ", player.score)
 
 pygame.quit()
