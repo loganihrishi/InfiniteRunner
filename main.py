@@ -5,7 +5,7 @@ import pygame
 # window attributes
 screen_width = 700
 screen_height = 500
-background = (255, 255, 255)
+background = (0, 0, 0 )
 
 obs_color = (255, 0, 0)
 
@@ -16,7 +16,7 @@ class Player:
         self.x = 10
         self.y = screen_height - 20
         self.delta_y = 0
-        self.gravity = 3.25
+        self.gravity = 3.5
         self.delta_x = 5
         self.color = (255, 0, 0)
         self.speed = 2
@@ -71,9 +71,8 @@ isRunning = True
 obstacle_set1 = [50, 100, 300, 400, 500]
 obstacle_set2 = [150, 250, 315, 470, 650]
 obstacle_set3 = [200, 256, 325, 576, 650]
-obstacle_speed = 1
+obstacle_speed = 2
 active = True
-
 
 def select_difficulty():
     choice = random.randint(1, 3)
@@ -103,7 +102,7 @@ while isRunning:
                 player.jump()
 
     # Drawing the player and obstacles
-    floor = pygame.draw.rect(screen, (0, 0, 0), [2, screen_height - 37.5, screen_width, 5])
+    floor = pygame.draw.rect(screen, (255, 255, 255  ), [2, screen_height - 37.5, screen_width, 5])
     player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 25, 25])
 
     for i in range(len(obstacles)):
@@ -115,14 +114,16 @@ while isRunning:
         # checking for collisions
         if player_rect.colliderect(obstacle):
             isRunning = False
+        else:
+            player.score += 1
 
     for i in range(len(obstacles)):
         if active:
             obstacles[i].x -= obstacle_speed
 
+
         if obstacles[i].x < -10:
             obstacles[i].x = random.randint(600, 700)
-            player.score += 10
 
     player.update()
 
