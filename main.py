@@ -121,7 +121,6 @@ while isRunning:
         if active:
             obstacles[i].x -= obstacle_speed
 
-
         if obstacles[i].x < -10:
             obstacles[i].x = random.randint(600, 700)
 
