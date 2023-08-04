@@ -1,11 +1,10 @@
 import time
 import random
-
 import pygame
 
 # window attributes
 screen_width = 700
-screen_height = 350
+screen_height = 500
 background = (255, 255, 255)
 
 obs_color = (255, 0, 0)
@@ -17,7 +16,7 @@ class Player:
         self.x = 10
         self.y = screen_height - 20
         self.delta_y = 0
-        self.gravity = 1
+        self.gravity = 3.25
         self.delta_x = 5
         self.color = (255, 0, 0)
         self.speed = 2
@@ -30,7 +29,6 @@ class Player:
         self.x += self.delta_x
 
     def update(self):
-
         self.x += self.speed
         if 0 < self.delta_y or self.y < screen_height:
             self.y -= self.delta_y
@@ -44,6 +42,14 @@ class Player:
 
         if self.x > screen_width:
             self.x = 10
+
+
+class Obstacle:
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
 
 
 # starting out the window
@@ -63,48 +69,56 @@ obstacle_set3 = [200, 256, 325, 576, 650]
 obstacle_speed = 1
 active = True
 
-
 def select_difficulty():
     choice = random.randint(1, 3)
-    if (choice == 1):
+    if choice == 1:
         return obstacle_set1
     elif choice == 2:
         return obstacle_set2
     return obstacle_set3
 
-obstacles = obstacle_set1
+
+# this is a list of obstacle objects
+obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in obstacle_set1]
+
 # colors for obstacles
 colors = [(0, 0, 0), (113, 171, 27), (255, 153, 255)]
 
 while isRunning:
     timer.tick(fps)
     screen.fill(background)
-    floor = pygame.draw.rect(screen, (0, 0, 0), [2, screen_height - 37.5, screen_width, 5])
-    player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 25, 25])
 
-    # checking the events during the game
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             isRunning = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                obstacles = select_difficulty()  # generate a method to get random difficulty levels
+                obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in select_difficulty()]
                 player.jump()
+
+    # Drawing the player and obstacles
+    floor = pygame.draw.rect(screen, (0, 0, 0), [2, screen_height - 37.5, screen_width, 5])
+    player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 25, 25])
 
     for i in range(len(obstacles)):
         color_index = random.randint(0, 2)
-        obs = pygame.draw.rect(screen, colors[color_index], [obstacles[i], screen_height - 62.5, 30, 30])
+        curr_obstacle = obstacles[i]
+        obstacle = pygame.draw.rect(screen, colors[color_index], [curr_obstacle.x, curr_obstacle.y, curr_obstacle.width, curr_obstacle.height])
+
+        # checking for collisions
+        if player_rect.colliderect(obstacle):
+            isRunning = False
 
     for i in range(len(obstacles)):
         if active:
-            obstacles[i] -= obstacle_speed
+            obstacles[i].x -= obstacle_speed
 
-        if obstacles[i] < -10:
-            obstacles[i] = random.randint(600, 700)
+        if obstacles[i].x < -10:
+            obstacles[i].x = random.randint(600, 700)
             player.score += 10
+
     player.update()
 
-    # updating the display
     pygame.display.flip()
 
 print("Your Score: ", player.score)
