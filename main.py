@@ -118,7 +118,7 @@ while isRunning:
     for i in range(len(obstacles)):
         color_index = random.randint(0, 2)
         curr_obstacle = obstacles[i]
-        obstacle = pygame.draw.rect(screen, colors[random.randint(0,2)],
+        obstacle = pygame.draw.rect(screen, colors[1],
                                     [curr_obstacle.x, curr_obstacle.y, curr_obstacle.width, curr_obstacle.height])
 
         # checking for collisions
@@ -131,8 +131,8 @@ while isRunning:
         if active:
             obstacles[i].x -= obstacle_speed
 
-        if obstacles[i].x < -10:
-            obstacles[i].x = random.randint(600, 700)
+        # if obstacles[i].x < -10:
+        #     obstacles[i].x = random.randint(600, 700)
 
     player.update()
 
