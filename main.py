@@ -109,13 +109,13 @@ while isRunning:
                 player.jump()
 
     # Drawing the player and obstacles
-    floor = pygame.draw.rect(screen, (255, 255, 255  ), [2, screen_height - 37.5, screen_width, 5])
+    floor = pygame.draw.rect(screen, (255, 255, 255), [2, screen_height - 37.5, screen_width, 5])
     player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 25, 25])
 
     for i in range(len(obstacles)):
         color_index = random.randint(0, 2)
         curr_obstacle = obstacles[i]
-        obstacle = pygame.draw.rect(screen, colors[color_index],
+        obstacle = pygame.draw.rect(screen, colors[random.randint(0,2)],
                                     [curr_obstacle.x, curr_obstacle.y, curr_obstacle.width, curr_obstacle.height])
 
         # checking for collisions
