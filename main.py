@@ -5,7 +5,7 @@ import pygame
 
 # window attributes
 screen_width = 700
-screen_height = 500
+screen_height = 350
 background = (255, 255, 255)
 
 obs_color = (255, 0, 0)
@@ -17,7 +17,7 @@ class Player:
         self.x = 10
         self.y = screen_height - 20
         self.delta_y = 0
-        self.gravity = 3.5
+        self.gravity = 1
         self.delta_x = 5
         self.color = (255, 0, 0)
         self.speed = 2
@@ -93,7 +93,7 @@ while isRunning:
 
     for i in range(len(obstacles)):
         color_index = random.randint(0, 2)
-        pygame.draw.rect(screen, colors[color_index], [obstacles[i], screen_height - 62.5, 30, 30])
+        obs = pygame.draw.rect(screen, colors[color_index], [obstacles[i], screen_height - 62.5, 30, 30])
 
     for i in range(len(obstacles)):
         if active:
@@ -102,7 +102,6 @@ while isRunning:
         if obstacles[i] < -10:
             obstacles[i] = random.randint(600, 700)
             player.score += 10
-
     player.update()
 
     # updating the display
