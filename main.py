@@ -131,16 +131,11 @@ while isRunning:
         if active:
             obstacles[i].x -= obstacle_speed
 
-        # if obstacles[i].x < -10:
-        #     obstacles[i].x = random.randint(600, 700)
+        if obstacles[i].x < -10:
+            obstacles[i].x = random.randint(600, 700)
 
     player.update()
 
     pygame.display.flip()
-
-# updating the player's high score
-player.update_high_score()
-print("Your high score", player.high_score)
-print("Your Score: ", player.score)
 
 pygame.quit()
