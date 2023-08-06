@@ -89,7 +89,8 @@ def select_difficulty():
 
 
 # this is a list of obstacle objects
-obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in obstacle_set1]
+# obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in obstacle_set1]
+obstacles =[]
 
 # colors for obstacles
 colors = [(0, 0, 0), (113, 171, 27), (255, 153, 255)]
@@ -104,9 +105,9 @@ time.sleep(3)
 
 # Starting with handDetection
 
-cap = cv2.VideoCapture(0)
-finger_detector = PalmDetector()
-
+# cap = cv2.VideoCapture(0)
+# finger_detector = PalmDetector()
+hasStarted = False
 # start the loop
 while isRunning:
     timer.tick(fps)
@@ -114,16 +115,22 @@ while isRunning:
     screen.blit(bg, (0, 0))
 
     for event in pygame.event.get():
+
         if event.type == pygame.QUIT:
             isRunning = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in select_difficulty()]
+                if not hasStarted:
+                    obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in [500, 700]]
+                    hasStarted = True
+                else:
+                    obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in select_difficulty()]
                 player.jump()
 
     # Drawing the player and obstacles
     # floor = pygame.draw.rect(screen, (255, 255, 255), [2, screen_height - 37.5, screen_width, 5])
     player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 25, 25])
+
 
     for i in range(len(obstacles)):
         color_index = random.randint(0, 2)
