@@ -131,7 +131,6 @@ while isRunning:
     # floor = pygame.draw.rect(screen, (255, 255, 255), [2, screen_height - 37.5, screen_width, 5])
     player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 25, 25])
 
-
     for i in range(len(obstacles)):
         color_index = random.randint(0, 2)
         curr_obstacle = obstacles[i]
