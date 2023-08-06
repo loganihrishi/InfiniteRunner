@@ -1,6 +1,10 @@
 import time
 import random
+
+import cv2
 import pygame
+
+from detector import PalmDetector
 
 # window attributes
 screen_width = 700
@@ -96,6 +100,12 @@ if takeString in 'yY':
     isRunning = True
 # wait for three seconds before the game starts
 time.sleep(3)
+
+
+# Starting with handDetection
+
+cap = cv2.VideoCapture(0)
+finger_detector = PalmDetector()
 
 # start the loop
 while isRunning:
