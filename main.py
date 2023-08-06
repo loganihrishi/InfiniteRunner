@@ -69,6 +69,7 @@ fps = 40
 timer = pygame.time.Clock()
 
 player = Player()  # Create the player instance
+player_image = pygame.image.load("images/gregor_final.png")
 
 bg = pygame.image.load("images/bg.jpg")
 
@@ -130,6 +131,7 @@ while isRunning:
     # Drawing the player and obstacles
     # floor = pygame.draw.rect(screen, (255, 255, 255), [2, screen_height - 37.5, screen_width, 5])
     player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 25, 25])
+    screen.blit(player_image, (player.x, player.y))
 
     for i in range(len(obstacles)):
         color_index = random.randint(0, 2)
