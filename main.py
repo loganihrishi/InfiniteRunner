@@ -16,7 +16,7 @@ class Player:
         self.x = 10
         self.y = screen_height - 20
         self.delta_y = 0
-        self.gravity = 2
+        self.gravity = 2.5
         self.delta_x = 5
         self.color = (255, 0, 0)
         self.speed = 2
