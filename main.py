@@ -1,21 +1,23 @@
 import time
 import random
-
 import cv2
 import pygame
 from pygame import mixer
-
 from detector import PalmDetector
 
-# window attributes
+# Constants
 screen_width = 700
 screen_height = 500
 background = (0, 0, 0)
-
 obs_color = (255, 0, 0)
 
+obstacle_set1 = [50, 100, 300, 400, 500]
+obstacle_set2 = [150, 250, 315, 470, 650]
+obstacle_set3 = [200, 256, 325, 576, 650]
+obstacle_speed = 3
+fps = 60
 
-# player class
+# Player class
 class Player:
     def __init__(self):
         self.x = 10
@@ -54,6 +56,7 @@ class Player:
             self.high_score = self.score
 
 
+# Obstacle class
 class Obstacle:
     def __init__(self, x, y, width, height):
         self.x = x
@@ -62,25 +65,7 @@ class Obstacle:
         self.height = height
 
 
-# starting out the window
-pygame.init()
-screen = pygame.display.set_mode([screen_width, screen_height])
-pygame.display.set_caption("Infinite Runner")
-fps = 60
-timer = pygame.time.Clock()
-
-player = Player()  # Create the player instance
-# player_image = pygame.image.load("images/gregor_final.png")
-
-bg = pygame.image.load("images/bg.jpg")
-
-# obstacles
-obstacle_set1 = [50, 100, 300, 400, 500]
-obstacle_set2 = [150, 250, 315, 470, 650]
-obstacle_set3 = [200, 256, 325, 576, 650]
-obstacle_speed = 3
-active = True
-
+# Function to select difficulty
 def select_difficulty():
     choice = random.randint(1, 3)
     if choice == 1:
@@ -90,90 +75,171 @@ def select_difficulty():
     return obstacle_set3
 
 
-# this is a list of obstacle objects
-# obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in obstacle_set1]
-obstacles =[]
+# Function to initialize the game
+def init_game():
+    pygame.init()
+    screen = pygame.display.set_mode([screen_width, screen_height])
+    pygame.display.set_caption("Infinite Runner")
+    timer = pygame.time.Clock()
 
-# colors for obstacles
-colors = [(0, 0, 0), (113, 171, 27), (255, 153, 255)]
-# take user input before starting the game
-isRunning = False
-takeString = input("Start the game: ")
-if takeString in 'yY':
-    isRunning = True
-# wait for three seconds before the game starts
-time.sleep(3)
+    player = Player()
+    bg = pygame.image.load("images/bg.jpg")
 
+    mixer.init()
+    mixer.music.load('music/gigachad.wav')
+    mixer.music.play()
 
-# Starting with handDetection
+    cap = cv2.VideoCapture(0)
+    finger_detector = PalmDetector()
+    hasStarted = False
 
-cap = cv2.VideoCapture(0)
-finger_detector = PalmDetector()
-hasStarted = False
-
-# starting the background music
-mixer.init()
-mixer.music.load('music/gigachad.wav')
-mixer.music.play()
-# start the loop
-while isRunning:
-
-    # read the frame and show it
-    ret, frame = cap.read()
-    cv2.imshow("Frame", frame)
-
-    # starting the game loop
-    timer.tick(fps)
-    screen.fill(background)
-    screen.blit(bg, (0, 0))
-
-    for event in pygame.event.get():
-
-        if event.type == pygame.QUIT:
-            isRunning = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                if not hasStarted:
-                    obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in [500, 700]]
-                    hasStarted = True
-                else:
-                    obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in select_difficulty()]
-                player.jump()
-
-    if finger_detector.is_palm_extended(frame):
-        if not hasStarted:
-            obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in [500, 700]]
-            hasStarted = True
-        else:
-            obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in select_difficulty()]
-        player.jump()
-
-    player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 25, 25])
-
-    for i in range(len(obstacles)):
-        color_index = random.randint(0, 2)
-        curr_obstacle = obstacles[i]
-        obstacle = pygame.draw.rect(screen, colors[color_index],
-                                    [curr_obstacle.x, curr_obstacle.y, curr_obstacle.width, curr_obstacle.height])
-
-        # checking for collisions
-        if player_rect.colliderect(obstacle):
-            isRunning = False
-        else:
-            player.score += 1
-
-    for i in range(len(obstacles)):
-        if active:
-            obstacles[i].x -= obstacle_speed
-
-        if obstacles[i].x < -10:
-            obstacles[i].x = random.randint(600, 700)
-
-    player.update()
-    pygame.display.flip()
+    return screen, player, bg, cap, finger_detector, hasStarted
 
 
-cap.release()
-cv2.destroyAllWindows()
+# Main game loop
+def game_loop():
+    screen, player, bg, cap, finger_detector, hasStarted = init_game()
+    isRunning = False
 
-pygame.quit()
+    obstacles = []
+    colors = [(0, 0, 0), (113, 171, 27), (255, 153, 255)]
+
+    # starting out the window
+    pygame.init()
+    screen = pygame.display.set_mode([screen_width, screen_height])
+    pygame.display.set_caption("Infinite Runner")
+    fps = 60
+    timer = pygame.time.Clock()
+
+    player = Player()  # Create the player instance
+    bg = pygame.image.load("images/bg.jpg")
+
+    mixer.init()
+    mixer.music.load('music/gigachad.wav')
+    mixer.music.play()
+
+    cap = cv2.VideoCapture(0)
+    finger_detector = PalmDetector()
+    hasStarted = False
+
+    # obstacles
+    obstacle_set1 = [50, 100, 300, 400, 500]
+    obstacle_set2 = [150, 250, 315, 470, 650]
+    obstacle_set3 = [200, 256, 325, 576, 650]
+    obstacle_speed = 3
+    active = True
+
+    # this is a list of obstacle objects
+    obstacles = []
+
+    # colors for obstacles
+    colors = [(0, 0, 0), (113, 171, 27), (255, 153, 255)]
+
+    # starting out the window
+    pygame.init()
+    screen = pygame.display.set_mode([screen_width, screen_height])
+    pygame.display.set_caption("Infinite Runner")
+    fps = 60
+    timer = pygame.time.Clock()
+
+    player = Player()  # Create the player instance
+    bg = pygame.image.load("images/bg.jpg")
+
+    mixer.init()
+    mixer.music.load('music/gigachad.wav')
+    mixer.music.play()
+
+    cap = cv2.VideoCapture(0)
+    finger_detector = PalmDetector()
+    hasStarted = False
+
+    # obstacles
+    obstacle_set1 = [50, 100, 300, 400, 500]
+    obstacle_set2 = [150, 250, 315, 470, 650]
+    obstacle_set3 = [200, 256, 325, 576, 650]
+    obstacle_speed = 3
+    active = True
+
+    # this is a list of obstacle objects
+    obstacles = []
+
+    # colors for obstacles
+    colors = [(0, 0, 0), (113, 171, 27), (255, 153, 255)]
+
+    # take user input before starting the game
+    isRunning = False
+    takeString = input("Start the game: ")
+    if takeString in 'yY':
+        isRunning = True
+
+    # wait for three seconds before the game starts
+    time.sleep(3)
+
+    # starting the background music
+    mixer.init()
+    mixer.music.load('music/gigachad.wav')
+    mixer.music.play()
+
+    # start the loop
+    while isRunning:
+        # read the frame and show it
+        ret, frame = cap.read()
+        cv2.imshow("Frame", frame)
+
+        # starting the game loop
+        timer.tick(fps)
+        screen.fill(background)
+        screen.blit(bg, (0, 0))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                isRunning = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    if not hasStarted:
+                        obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in [500, 700]]
+                        hasStarted = True
+                    else:
+                        obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in select_difficulty()]
+                    player.jump()
+
+        if finger_detector.is_palm_extended(frame):
+            if not hasStarted:
+                obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in [500, 700]]
+                hasStarted = True
+            else:
+                obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in select_difficulty()]
+            player.jump()
+
+        player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 25, 25])
+
+        for i in range(len(obstacles)):
+            color_index = random.randint(0, 2)
+            curr_obstacle = obstacles[i]
+            obstacle = pygame.draw.rect(screen, colors[color_index],
+                                        [curr_obstacle.x, curr_obstacle.y, curr_obstacle.width, curr_obstacle.height])
+
+            # checking for collisions
+            if player_rect.colliderect(obstacle):
+                isRunning = False
+            else:
+                player.score += 1
+
+        for i in range(len(obstacles)):
+            if active:
+                obstacles[i].x -= obstacle_speed
+
+            if obstacles[i].x < -10:
+                obstacles[i].x = random.randint(600, 700)
+
+        player.update()
+        pygame.display.flip()
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+    pygame.quit()
+
+
+if __name__ == "__main__":
+    game_loop()
