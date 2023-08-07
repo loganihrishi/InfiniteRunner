@@ -20,7 +20,7 @@ class Player:
         self.x = 10
         self.y = screen_height - 20
         self.delta_y = 0
-        self.gravity = 2.5
+        self.gravity = 3
         self.delta_x = 5
         self.color = (255, 0, 0)
         self.speed = 2
@@ -65,11 +65,11 @@ class Obstacle:
 pygame.init()
 screen = pygame.display.set_mode([screen_width, screen_height])
 pygame.display.set_caption("Infinite Runner")
-fps = 40
+fps = 60
 timer = pygame.time.Clock()
 
 player = Player()  # Create the player instance
-player_image = pygame.image.load("images/gregor_final.png")
+# player_image = pygame.image.load("images/gregor_final.png")
 
 bg = pygame.image.load("images/bg.jpg")
 
@@ -77,7 +77,7 @@ bg = pygame.image.load("images/bg.jpg")
 obstacle_set1 = [50, 100, 300, 400, 500]
 obstacle_set2 = [150, 250, 315, 470, 650]
 obstacle_set3 = [200, 256, 325, 576, 650]
-obstacle_speed = 2
+obstacle_speed = 3
 active = True
 
 def select_difficulty():
@@ -106,11 +106,17 @@ time.sleep(3)
 
 # Starting with handDetection
 
-# cap = cv2.VideoCapture(0)
-# finger_detector = PalmDetector()
+cap = cv2.VideoCapture(0)
+finger_detector = PalmDetector()
 hasStarted = False
 # start the loop
 while isRunning:
+
+    # read the frame and show it
+    ret, frame = cap.read()
+    cv2.imshow("Frame", frame)
+
+    # starting the game loop
     timer.tick(fps)
     screen.fill(background)
     screen.blit(bg, (0, 0))
@@ -128,10 +134,15 @@ while isRunning:
                     obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in select_difficulty()]
                 player.jump()
 
-    # Drawing the player and obstacles
-    # floor = pygame.draw.rect(screen, (255, 255, 255), [2, screen_height - 37.5, screen_width, 5])
+    if finger_detector.is_palm_extended(frame):
+        if not hasStarted:
+            obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in [500, 700]]
+            hasStarted = True
+        else:
+            obstacles = [Obstacle(x, screen_height - 62.5, 30, 30) for x in select_difficulty()]
+        player.jump()
+
     player_rect = pygame.draw.rect(screen, player.color, [player.x, player.y, 25, 25])
-    screen.blit(player_image, (player.x, player.y))
 
     for i in range(len(obstacles)):
         color_index = random.randint(0, 2)
@@ -153,7 +164,10 @@ while isRunning:
             obstacles[i].x = random.randint(600, 700)
 
     player.update()
-
     pygame.display.flip()
+
+
+cap.release()
+cv2.destroyAllWindows()
 
 pygame.quit()
