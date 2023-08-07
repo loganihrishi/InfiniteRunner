@@ -3,7 +3,6 @@ import random
 
 import cv2
 import pygame
-from pygame.locals import *
 from pygame import mixer
 
 from detector import PalmDetector
