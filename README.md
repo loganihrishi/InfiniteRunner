@@ -13,7 +13,7 @@ Infinite Runner is an endless running game developed using Python and the Pygame
 
 ## Getting Started
 1. Prerequisites: Make sure you have Python 3.x installed on your system.
-2. Clone the repository: `git clone https://github.com/your-username/infinite-runner.git`
+2. Clone the repository: `git clone https://github.com/loganihrishi/infinite-runner.git`
 3. Install required dependencies: `pip install pygame opencv-python cvzone`
 4. Run the game: `python main.py`
 5. Use keyboard controls (space key) or hand gestures (if enabled) to make your character jump and avoid obstacles.
