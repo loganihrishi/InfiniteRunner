@@ -3,6 +3,8 @@ import random
 
 import cv2
 import pygame
+from pygame.locals import *
+from pygame import mixer
 
 from detector import PalmDetector
 
@@ -109,6 +111,11 @@ time.sleep(3)
 cap = cv2.VideoCapture(0)
 finger_detector = PalmDetector()
 hasStarted = False
+
+# starting the background music
+mixer.init()
+mixer.music.load('music/gigachad.wav')
+mixer.music.play()
 # start the loop
 while isRunning:
 
