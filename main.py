@@ -10,7 +10,7 @@ from detector import PalmDetector
 # window attributes
 screen_width = 700
 screen_height = 500
-background = (0, 0, 0 )
+background = (0, 0, 0)
 
 obs_color = (255, 0, 0)
 
